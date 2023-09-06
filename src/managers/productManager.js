@@ -20,11 +20,11 @@ class ProductManager {
     }
 
     //Creo el metodo addProduct
-    addProduct(title,description,price,code,status= true,stock,category,thumbnails){
+    addProduct(product){
         //Valido codigos duplicados.
-        const noDupCode = this.products.some((prod) => prod.code === code);
+        const noDupCode = this.products.some((prod) => prod.code === product.code);
         if(noDupCode){
-            console.error(`Error: el codigo "${code}" ya existe, intente con otro.`);
+            console.error(`Error: el codigo "${product.code}" ya existe, intente con otro.`);
             return false; ///Devuelve false para volver al endpoint.
         }
     
@@ -33,21 +33,21 @@ class ProductManager {
     let id = this.products.length + 1; //Numero de elementos del array + 1;
     
     const newProduct = {
-        id,
-        title,
-        description,
-        code,
-        price,
-        status,
-        stock,
-        category,
-        thumbnails
+        id: id,
+        title: product.title,
+        description: product.description,
+        code: product.code,
+        price: product.price,
+        status: true,
+        stock: product.stock,
+        category: product.category,
+        thumbnails: product.thumbnails,
     };
     
     ///Pusheo el array
     this.products.push(newProduct);
     ///Guardo en array el producto en el archivo.
-    this.saveProductsInJson();
+    this.saveProductsInJSON();
     return true;
     }
 

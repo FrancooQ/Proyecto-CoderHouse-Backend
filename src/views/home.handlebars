@@ -1,0 +1,15 @@
+{{!-- Contiene lista de productos agregados --}}
+
+<div>
+    <h1>Lista de productos!</h1>
+</div>
+
+<div>
+    {{#each products}}
+    <div>
+        <h4>{{this.title}}</h4>
+        <h3>{{this.description}}</h3>
+        <p>{{this.price}}</p>
+    </div>
+    {{/each}}
+</div>

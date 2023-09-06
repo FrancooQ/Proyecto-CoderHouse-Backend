@@ -1,0 +1,49 @@
+{{!-- Vivira solo en endPoint --}}
+
+<div>
+  <div>
+    <h1>Real Time Products</h1>
+    <div>
+      <div id="formAdd">
+        <h3>Agregar nuevo producto</h3>
+        <div>
+          <label>Titulo</label>
+          <input type="text" placeholder="Titulo del producto" name="title" id="title"/>
+        </div>
+        <div>
+          <label>Description</label>
+          <input type="text" placeholder="Descripcion del producto" name="description" id="description"/>
+        </div>
+        <div>
+          <label>Price</label>
+          <input type="text" placeholder="precio del producto" name="price" id="price"/>
+        </div>
+        <div>
+          <label>Code</label>
+          <input type="text" placeholder="codigo unico del producto" name="code" id="code"/>
+        </div>
+        <input
+          type="button"
+          value="Add Product (+)"
+          id="btnAddProduct"
+        />
+      </div>
+    </div>
+    <div>
+      <div>
+        <h3>Eliminar producto</h3>
+        <div>
+          <label>Eliminar producto por id</label>
+          <input type="text" placeholder="Id del producto" name="id" id="inputDeleteId"/>
+        </div>
+        <input type="button" value="Delete Product (-)" id="btnDeleteProduct" />
+      </div>
+    </div>
+  </div>
+  <div >
+    <div id="srvResponse"></div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
