@@ -10,6 +10,20 @@ class ProductManager {
         this.createFile();
     }
 
+    //Metodo para calcular el ultimo id
+    calculateLastId() {
+        // Obtiene los productos del archivo
+        const products = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+        if (products.length === 0) {
+          return 0; // Si no hay productos, inicia desde 0
+        }
+        // Encuentra el ID más alto en los productos existentes
+        const lastId = products.reduce((maxId, product) => {
+          return product.id > maxId ? product.id : maxId;
+        }, 0);
+        return lastId;
+      }
+
     //Creo el metodo createFile
     createFile(){
         ///Verifico si existe el archivo path.
@@ -30,7 +44,8 @@ class ProductManager {
     
     
     //Generador de IDs
-    let id = this.products.length + 1; //Numero de elementos del array + 1;
+    ///Genero una variable id, que va a llamar al metodo que calcula el ultimo id generado y le suma 1.
+    let id = this.calculateLastId() + 1;
     
     const newProduct = {
         id: id,
