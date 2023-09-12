@@ -58,6 +58,7 @@ class ProductManager {
 
   //#Delete
   async deleteProduct(id) {
+    console.log(id);
     try {
       if (this.validateId(id)) {
         if (await this.getProductById(id)) {

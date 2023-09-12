@@ -13,6 +13,7 @@ socket.on("realTimeProducts", (data) => {
                   <th scope="col">Image</th>
                   <th scope="col">Description</th>
                   <th scope="col">Price</th>
+                  <th scope="col">Code</th>
                 </tr>
               </thead>
               <tbody id="products">`;
@@ -20,22 +21,25 @@ socket.on("realTimeProducts", (data) => {
   //Muestro productos cargados.
   data.forEach((prod) => {
     html += `<tr>
-              <td>${prod.id}</td>
+              <td>${prod._id}</td>
               <td>${prod.title}</td>
               <td><img src="${prod.thumbnails}" alt="" width="100px" /></td>
               <td>${prod.description}</td>
               <td>$ ${prod.price}</td>
+              <td> ${prod.code}</td>
             </tr>`;
   });
   html += `</tbody></table>`;
   srvResponse.innerHTML = html;
 });
 
+let currentCode = 1;
+
 const addProduct = () => {
   const title = document.getElementById("title").value;
   const description = document.getElementById("description").value;
   const price = document.getElementById("price").value;
-  const code = document.getElementById("code").value;
+  const code = currentCode++;
   const product = {
     title: title,
     description: description,
@@ -48,8 +52,9 @@ const addProduct = () => {
 btnAddProduct.onclick = addProduct;
 
 const deleteProduct = () => {
-  const idProduct = +document.getElementById("inputDeleteId").value;
-  socket.emit("deleteProduct", idProduct);
+  const inputElement = document.getElementById("inputDeleteId");
+  const id = inputElement.value;
+  socket.emit("deleteProduct", id);
 };
 
 btnDeleteProduct.onclick = deleteProduct;

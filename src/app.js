@@ -68,8 +68,8 @@ io.on("connection", async (socket) => {
     });
   
     //Escucho evento deleteProduct
-    socket.on("deleteProduct", async (data) => {
-      await PM.deleteProduct(data);
+    socket.on("deleteProduct", async (id) => {
+      await PM.deleteProduct(id);
       //obtengo todos los productos nuevamente
       const products = await PM.getProducts();
       socket.emit("realTimeProducts", products);
