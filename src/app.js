@@ -2,7 +2,8 @@ import express from 'express'
 import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
 import {Server} from 'socket.io';
-import ProductManager from './managers/productManager.js';
+import ProductManager from './dao/managers/ProductManager.js';
+import mongoose from "mongoose";
 
 import cartsRoute from './routes/carts.js';
 import productsRoute from './routes/products.js';
@@ -28,6 +29,10 @@ app.use('/api/carts', cartsRoute);
 app.use('/api/products', productsRoute);
 app.use('/', viewsRoute);
 
+
+//MongoDB  userCoder 123456F 
+mongoose.connect('mongodb+srv://userCoder:123456F@cluster0.mzylpmw.mongodb.net/');
+
 const httpServer = app.listen(port, () => {
     console.log('Server ON')
 })
@@ -36,38 +41,37 @@ const httpServer = app.listen(port, () => {
 //Socket.io
 const io = new Server(httpServer);
 
-io.on('connection', socket => {
-    console.log("Nuevo cliente conectado.");
-
-//obtengo todos los productos
-const products = PM.getProducts();
-socket.emit("realTimeProducts", products);
-
-//Escucho evento newProduct
-socket.on("newProduct", (data) => {
-    const product = {
+io.on("connection", async (socket) => {
+    //#Real Time Products
+    console.log("New connection");
+    //obtengo todos los productos
+    const products = await PM.getProducts();
+    socket.emit("realTimeProducts", products);
+  
+    //Escucho evento newProduct
+    socket.on("newProduct", async (data) => {
+      const product = {
         title: data.title,
         description: data.description,
-        price: data.price,
         code: data.code,
-        status: "",
+        price: data.price,
+        status: true,
         stock: 10,
         category: "",
-        thumbnails: ""
-    };
-
-    //creo el producto
-    PM.addProduct(product);
-    //obtengo todos los productos nuevamente
-    const products = PM.getProducts();
-    socket.emit("realTimeProducts", products);
+        thumbnails: data.thumbnails,
+      };
+      //creo el producto
+      await PM.addProduct(product);
+      //obtengo todos los productos nuevamente
+      const products = await PM.getProducts();
+      socket.emit("realTimeProducts", products);
     });
-
+  
     //Escucho evento deleteProduct
-    socket.on("deleteProduct", (data) => {
-    PM.deleteProducts(parseInt(data));
-    //obtengo todos los productos nuevamente
-    const products = PM.getProducts();
-    socket.emit("realTimeProducts", products);
-    }); 
-});
+    socket.on("deleteProduct", async (data) => {
+      await PM.deleteProduct(data);
+      //obtengo todos los productos nuevamente
+      const products = await PM.getProducts();
+      socket.emit("realTimeProducts", products);
+    });
+  });
