@@ -31,7 +31,7 @@ app.use('/', viewsRoute);
 
 
 //MongoDB  userCoder 123456F 
-mongoose.connect('mongodb+srv://userCoder:123456F@cluster0.mzylpmw.mongodb.net/');
+mongoose.connect('mongodb+srv://userCoder:123456F@cluster0.mzylpmw.mongodb.net/catalogo');
 
 const httpServer = app.listen(port, () => {
     console.log('Server ON')
