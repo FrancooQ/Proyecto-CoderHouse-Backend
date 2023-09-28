@@ -6,7 +6,7 @@ class ProductManager {
     try {
       if (await this.validateCode(product.code)) {
         //si el codigo existe
-        console.error(`Error: product code "${code}" already exists`);
+        console.error(`Error: product code "${product.code}" already exists`);
         return false;
       } else {
         await productModel.create(product);
@@ -19,8 +19,37 @@ class ProductManager {
     }
   }
   //#Read
-  async getProducts(limit) {
-    return await limit ? productModel.find().limit(limit).lean(): productModel.find().lean();//lean() devuelve un objeto literal de JS y no un objeto de mongoose
+  async getProducts(limit = 10, page = 1, sort = '', query = {}) {
+    
+    try {
+      const options = {
+        limit: parseInt(limit),
+        page: parseInt(page),
+        sort: sort === 'asc' ? 'price' : sort === 'desc' ? '-price' : null,
+      };
+  
+      let products = await productModel.paginate(query, options);
+  
+      const response = {
+        status: 'success',
+        payload: products.docs,
+        totalPages: products.totalPages,
+        prevPage: products.prevPage || null,
+        nextPage: products.nextPage || null,
+        page: products.page,
+        hasPrevPage: products.hasPrevPage,
+        hasNextPage: products.hasNextPage,
+        prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}&limit=${limit}&sort=${sort}` : null,
+        nextLink: products.hasNextPage ? `/products?page=${products.nextPage}&limit=${limit}&sort=${sort}` : null,
+      };
+  
+      return response;
+    } catch (error) {
+      return {
+        status: 'error',
+        payload: error.message,
+      };
+    }
   }
 
   async getProductById(id) {

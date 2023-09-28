@@ -45,8 +45,8 @@ io.on("connection", async (socket) => {
     //#Real Time Products
     console.log("New connection");
     //obtengo todos los productos
-    const products = await PM.getProducts();
-    socket.emit("realTimeProducts", products);
+    const products = await PM.getProducts('');
+    socket.emit("realTimeProducts", products.payload);
   
     //Escucho evento newProduct
     socket.on("newProduct", async (data) => {
@@ -63,15 +63,15 @@ io.on("connection", async (socket) => {
       //creo el producto
       await PM.addProduct(product);
       //obtengo todos los productos nuevamente
-      const products = await PM.getProducts();
-      socket.emit("realTimeProducts", products);
+      const products = await PM.getProducts('');
+      socket.emit("realTimeProducts", products.payload);
     });
   
     //Escucho evento deleteProduct
     socket.on("deleteProduct", async (id) => {
       await PM.deleteProduct(id);
       //obtengo todos los productos nuevamente
-      const products = await PM.getProducts();
-      socket.emit("realTimeProducts", products);
+      const products = await PM.getProducts('');
+      socket.emit("realTimeProducts", products.payload);
     });
   });

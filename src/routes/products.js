@@ -6,9 +6,8 @@ const PM = new ProductManager();
 
 //creo el endpoint /products y /products?limit=n
 router.get("/", async (req, res) => {
-  const products = await PM.getProducts();
-  let limit = +req.query.limit;
-  res.send({ Products: limit ? products.slice(0, limit) : products });
+  const products = await PM.getProducts(req.query);
+  res.send({ products });
 });
 
 //creo el endpoint POST raiz
